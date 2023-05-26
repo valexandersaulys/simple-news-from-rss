@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  </head>
+  <body>
+    <div class="navbar">
+      <a href="/">Go Back Home</a>
+    </div>
+    <div class="header">
+      <div class="header-title">
+        {{ title }}
+      </div>
+      <div class="header-author">
+        {{ author }}
+      </div>
+      <div class="publish-date">
+        {{ pubDate }}
+      </div>
+      <div class="header-link-container">
+        <a href="{{ link }}">{{ link }}</a>
+      </div>
+    </div>
+    <div class="article-body">
+      {{ article_body | safe }}
+    </div>
+  </body>  
+</html>

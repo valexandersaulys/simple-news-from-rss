@@ -1,0 +1,21 @@
+{
+  "name": "static-siate-from-rss",
+  "version": "1.0.0",
+  "description": "## Logic",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "prettier --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@extractus/article-extractor": "^7.2.16",
+    "nunjucks": "^3.2.4",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8"
+  }
+}
