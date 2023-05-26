@@ -2,18 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8"/>
-    <title>{{ feed.feedName }}</title>
+    <title>Homepage</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
     <link href="/styles.css" rel="stylesheet"/>
   </head>
   <body>
-    <div class="feed-title">
-      {{ feed.feedName }}
+    <div class="links-header">
+      Headlines from around the world!
     </div>
-    <div class="feed-items">
+    <div class="links-container">
       <ul>
-        {% for item in feed.feedLinks %}
-          <li><a href="/{{feed.feedName}}/{{item.linkUuid}}.html">{{item.title}}</a></li>
+        {% for feed in allFeeds %}
+          <li><a href="/{{feed.feedName}}/">{{feed.feedName}}</a></li>
         {% endfor %}
       </ul>
     </div>

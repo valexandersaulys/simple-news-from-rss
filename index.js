@@ -1,9 +1,9 @@
 // const fs = require("fs");
-const { open, readFile } = require("node:fs/promises");
+const { open, readFile, copyFile } = require("node:fs/promises");
 
 const { retrieveLinks } = require("./retrieve-links");
 const { extractArticles } = require("./extract-article");
-const { hydrateHtml } = require("./hydrate-templates");
+const { hydrateHtml, createMasterPage } = require("./hydrate-templates");
 const { dumpToDisk } = require("./dump-to-disk");
 
 readFile("./feeds.txt", "utf-8")
@@ -17,10 +17,11 @@ readFile("./feeds.txt", "utf-8")
       lines
         .filter((feed) => feed.trim() != "")
         .map(async (feed) => {
-          const feedLinks = await retrieveLinks(feed);
+          const [feedName, feedUrl] = feed.split(" ");
+          const feedLinks = await retrieveLinks(feedUrl);
           return {
-            feedName: feed,
-            feedLinks: feedLinks.filter((link) => link),
+            feedName,
+            feedLinks: feedLinks.filter((link) => link)
           };
         })
     )
@@ -28,6 +29,11 @@ readFile("./feeds.txt", "utf-8")
   .then((feeds) => Promise.all(feeds.map((feed) => extractArticles(feed))))
   .then((feeds) => Promise.all(feeds.map((feed) => hydrateHtml(feed))))
   .then((feeds) => Promise.all(feeds.map((feed) => dumpToDisk(feed))))
+  .then((feeds) => createMasterPage(feeds))
+  .then(() => {
+    // copy over ./templates/styles.css to ./output/styles.css
+    copyFile("./templates/styles.css", "./output/styles.css");
+  })
   .catch((err) => {
     console.error(err);
   });
