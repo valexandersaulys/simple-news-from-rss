@@ -1,4 +1,4 @@
-// const fs = require("fs");
+const fs = require("fs");
 const { open, readFile, copyFile } = require("node:fs/promises");
 
 const { retrieveLinks } = require("./retrieve-links");
@@ -26,8 +26,18 @@ readFile("./feeds.txt", "utf-8")
         })
     )
   )
-  .then((feeds) => Promise.all(feeds.map((feed) => extractArticles(feed))))
+  .then(async (feeds) => {
+    let existingArticles = await readFile("./existingArticles.json", "utf-8");
+    existingArticles = JSON.parse(existingArticles);
+    return Promise.all(
+      feeds.map((feed) => extractArticles(feed, existingArticles))
+    );
+  })
   .then((feeds) => Promise.all(feeds.map((feed) => hydrateHtml(feed))))
+  .then(async (feeds) => {
+    await fs.writeFileSync("./existingArticles.json", JSON.stringify(feeds));
+    return feeds;
+  })
   .then((feeds) => Promise.all(feeds.map((feed) => dumpToDisk(feed))))
   .then((feeds) => createMasterPage(feeds))
   .then(() => {

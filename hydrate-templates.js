@@ -6,6 +6,7 @@ nunjucks.configure("templates"); // , { autoescape: true });
 // nunjucks.render('index.html', { foo: 'bar' });
 
 const hydrateItem = async (feedItem) => {
+  // console.log(Object.keys(feedItem));
   return {
     ...feedItem,
     renderedHtml: await nunjucks.render("article.jinja2", feedItem)
@@ -20,9 +21,6 @@ const hydrateHtml = async (feed) => {
 };
 
 const createMasterPage = async (allFeeds) => {
-  const renderedHtml = await nunjucks.render("homepage.jinja2", { allFeeds });
-  await fs.writeFileSync("./output/index.html", renderedHtml);
-
   return Promise.all(
     allFeeds.map(async (feed) => {
       const renderedHtml = await nunjucks.render("feedpage.jinja2", {
